@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets
 
 buildscript {
   repositories {
+    maven{ url "https://maven.aliyun.com/repository/public" }
     mavenCentral()
     jcenter()
     maven {
@@ -52,6 +53,7 @@ spotless {
 allprojects {
 
   repositories {
+    maven{ url "https://maven.aliyun.com/repository/public" }
     mavenCentral()
   }
 
@@ -441,7 +443,7 @@ subprojects {
     // See https://www.lightbend.com/blog/scala-inliner-optimizer for more information about the optimizer.
     scalaCompileOptions.additionalParameters += ["-opt:l:inline"]
     scalaCompileOptions.additionalParameters += inlineFrom
-    
+
     // these options are valid for Scala versions < 2.13 only
     // Scala 2.13 removes them, see https://github.com/scala/scala/pull/6502 and https://github.com/scala/scala/pull/5969
     if (versions.baseScala == '2.12') {
