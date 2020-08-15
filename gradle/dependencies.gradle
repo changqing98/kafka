@@ -20,7 +20,7 @@
 ext {
   versions = [:]
   libs = [:]
-  
+
   // Enabled by default when commands like `testAll` are invoked
   defaultScalaVersions = [ '2.12', '2.13' ]
   // Available if -PscalaVersion is used. This is useful when we want to support a Scala version that has
@@ -179,6 +179,7 @@ libs += [
   scalatest: "org.scalatest:scalatest_$versions.baseScala:$versions.scalatest",
   slf4jApi: "org.slf4j:slf4j-api:$versions.slf4j",
   slf4jlog4j: "org.slf4j:slf4j-log4j12:$versions.slf4j",
+  slf4jSimple: "org.slf4j:slf4j-simple:$versions.slf4j",
   snappy: "org.xerial.snappy:snappy-java:$versions.snappy",
   zookeeper: "org.apache.zookeeper:zookeeper:$versions.zookeeper",
   jfreechart: "jfreechart:jfreechart:$versions.jfreechart",

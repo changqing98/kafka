@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets
 
 buildscript {
   repositories {
+    mavenLocal()
     maven{ url "https://maven.aliyun.com/repository/public" }
     mavenCentral()
     jcenter()
@@ -42,6 +43,9 @@ buildscript {
 }
 
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "eclipse"
+apply plugin: 'idea'
+
 spotless {
   scala {
     target 'streams/**/*.scala'
@@ -53,10 +57,11 @@ spotless {
 allprojects {
 
   repositories {
+    mavenLocal()
     maven{ url "https://maven.aliyun.com/repository/public" }
     mavenCentral()
   }
-
+  apply plugin: 'eclipse'
   apply plugin: 'idea'
   apply plugin: 'org.owasp.dependencycheck'
   apply plugin: 'com.github.ben-manes.versions'
@@ -704,8 +709,10 @@ project(':core') {
   apply plugin: "org.scoverage"
   archivesBaseName = "kafka_${versions.baseScala}"
 
+
   dependencies {
     compile project(':clients')
+    compile libs.slf4jSimple
     compile libs.jacksonDatabind
     compile libs.jacksonModuleScala
     compile libs.jacksonDataformatCsv

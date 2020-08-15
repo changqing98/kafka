@@ -16,6 +16,8 @@
 repositories {
   repositories {
     // For license plugin.
+    mavenLocal()
+    maven{ url "https://maven.aliyun.com/repository/public" }
     maven {
       url 'https://dl.bintray.com/content/netflixoss/external-gradle-plugins/'
     }
