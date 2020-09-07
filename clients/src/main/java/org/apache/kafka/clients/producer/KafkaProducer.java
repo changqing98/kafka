@@ -238,9 +238,12 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
     private final String clientId;
     // Visible for testing
     final Metrics metrics;
+    // 分区选择器，根据某个分区选择策略将消息路由到指定的分区
     private final Partitioner partitioner;
+    // 消息的最大长度，包括消息头、序列化后的key及value的长度
     private final int maxRequestSize;
     private final long totalMemorySize;
+
     private final ProducerMetadata metadata;
     private final RecordAccumulator accumulator;
     private final Sender sender;
