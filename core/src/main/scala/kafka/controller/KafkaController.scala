@@ -95,7 +95,9 @@ class KafkaController(val config: KafkaConfig,
   val topicDeletionManager = new TopicDeletionManager(config, controllerContext, replicaStateMachine,
     partitionStateMachine, new ControllerDeletionClient(this, zkClient))
 
+  // Controller结点zookeeper监听器
   private val controllerChangeHandler = new ControllerChangeHandler(eventManager)
+  // Broker Zookeeper监听器
   private val brokerChangeHandler = new BrokerChangeHandler(eventManager)
   private val brokerModificationsHandlers: mutable.Map[Int, BrokerModificationsHandler] = mutable.Map.empty
   private val topicChangeHandler = new TopicChangeHandler(eventManager)
