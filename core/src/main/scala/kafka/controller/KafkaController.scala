@@ -160,6 +160,9 @@ class KafkaController(val config: KafkaConfig,
         queuedEvent.awaitProcessing()
       }
     })
+    /**
+     * 发布Broker启动事件 {@link processStartup}
+     */
     eventManager.put(Startup)
     eventManager.start()
   }
@@ -1229,6 +1232,7 @@ class KafkaController(val config: KafkaConfig,
   }
 
   private def processStartup(): Unit = {
+    // 注册对controller结点的监听器
     zkClient.registerZNodeChangeHandlerAndCheckExistence(controllerChangeHandler)
     elect()
   }
@@ -1318,22 +1322,25 @@ class KafkaController(val config: KafkaConfig,
     zkClient.registerZNodeChangeHandlerAndCheckExistence(controllerChangeHandler)
     activeControllerId = zkClient.getControllerId.getOrElse(-1)
     if (wasActiveBeforeChange && !isActive) {
+      // 之前是controller，现在不是了，controller卸任
       onControllerResignation()
     }
   }
 
   private def elect(): Unit = {
+    // 获取controller id
     activeControllerId = zkClient.getControllerId.getOrElse(-1)
     /*
      * We can get here during the initial startup and the handleDeleted ZK callback. Because of the potential race condition,
      * it's possible that the controller has already been elected when we get here. This check will prevent the following
      * createEphemeralPath method from getting into an infinite loop if this broker is already the controller.
      */
+    // 集群中已经有了controller
     if (activeControllerId != -1) {
       debug(s"Broker $activeControllerId has been elected as the controller, so stopping the election process.")
       return
     }
-
+    // 集群中没有controller
     try {
       val (epoch, epochZkVersion) = zkClient.registerControllerAndIncrementControllerEpoch(config.brokerId)
       controllerContext.epoch = epoch
@@ -1342,7 +1349,7 @@ class KafkaController(val config: KafkaConfig,
 
       info(s"${config.brokerId} successfully elected as the controller. Epoch incremented to ${controllerContext.epoch} " +
         s"and epoch zk version is now ${controllerContext.epochZkVersion}")
-
+      // controller故障转移
       onControllerFailover()
     } catch {
       case e: ControllerMovedException =>
